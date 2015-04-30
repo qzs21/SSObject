@@ -1,37 +1,67 @@
-SSObjectBase
-============
+## Quick start
 
-IOS 自定义对象 自动 序列化 反序列化 归档 基类
+SSObject 支持 [CocoaPods](http://cocoapods.org).  添加下面的配置到 Podfile:
 
-介绍：     
-	前几天在项目中需要将自定义的对象归档，IOS归档自定义对象需要遵循NSCoding协议，但是需要保存的对象里面的属性还是自定义对象，而且还有多个层级，这时候想归档对象就变得很复杂了，于是寻觅通用的归档方法。 
+```ruby
+pod 'NSObject+extend', :git => 'https://github.com/qzs21/SSObject.git'
+```
 
-	在网上找到了一篇文章，介绍的是将自定义对象归档为JSON的方法，受到它的启发，做了这个封装。（文章链接找不到了，感谢该文章作者） 
-     
-	完成了以后发现很好用，于是拿出来分享！ 
 
-	用法很简单，只要保证需要归档的对象继承自SSObjectBase基类即可。 
+## 功能：
+* 可以将数组或键值对映射成本地对象，主要用于对象序列化和网络数据解析
+* 数据模型和字典互转
 
-     
+## 常用场景：
+* 网络请求Json数据 --> 解析Json成本地数组或字典 -->  使用本类将数组或字典映射为数据模型
+* 对象序列化成字典保存
 
-	序列化方法： 
+## 特性：
+* 实现对象正向反向映射, 自动判断属性类型，使用字典对应的键值匹配属性名进行初始化赋值
+* 支持类型 NSString, NSDate, NSNumber, NSArray, 基本常量, SSObject及其子类
+* 对于NSDate，如果是数字自动按照时间戳进行转换, 如果是字符串，按照提供的时间格式转换
+* 支持数组直接序列化成对象!
 
-		调用saveToFile:传入保存路径， 
+## 注意：
+* 如果只读属性实现了Get方法，则会抛出异常，虽然内部已经实现捕获异常不会导致崩溃，但是建议使用时注意
 
-	反序列化方法： 
+## 用例：
 
-		调用loadFromFile:传入归档文件路径 
+### 数据模型类实现：
 
-     
+```objective-c
+@interface SimpleObject : SSObject
+@property (nonatomic, strong) SimpleObject * testObj;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, assign) int intValue;
+@property (nonatomic, strong) NSArray * testItems;
+@property (nonatomic, strong) id value;
+@end
+@implementation SimpleObject
+- (Class)arrayClassWithPropertyName:(NSString *)propertyName {
+    return SimpleObject.class;
+}
+@end
+```
 
-	SSObjectBase有以下特点： 
+### 实例化：
 
-		1、只归档属性值，属性必须是支持读与写的。 
-
-		2、同时支持自定义对象，NS系列对象，普通变量（如int，double，BOOL）的归档 
-
-		3、支持自定义对象的属性也是自定义对象的归档。 
-
-		4、对于特殊的属性，只需要重载基类NSCoding协议里面的两个方法即可 
-
-	虽然限制很多，但是已经能满足大部分需求了。另外，实现文件里面注释掉的代码，可以用于获取属性的类型，算是给扩充SSObjectBase提供思路吧！
+```objective-c
+NSDictionary * dic = @{ @"testObj": @{  @"name": @"test2",
+                                            @"intValue": @(80) },
+                            @"name":        @"test1",
+                            @"intValue":    @"10",
+                            @"value":       @{  @"key1": @"value1" },
+                            @"testItems":   @[  @{ @"name": @"testName1"},
+                                                @{ @"name": @"testName2"},
+                                                @{ @"name": @"testName3"}]};
+NSArray * arr = @[  @{@"name": @"testName1"},
+                    @{@"name": @"testName2"},
+                    @{@"name": @"testName3"}];
+SimpleObject * obj = [SimpleObject objectWithDictionary:dic];
+NSArray * objItems = [SimpleObject arrayWithDictionarys:arr];
+NSLog(@"%@", obj);
+NSLog(@"%@", obj.dictionaryFormInfo);
+NSLog(@"%@", objItems);
+```
+       
+       
