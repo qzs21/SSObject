@@ -3,7 +3,7 @@
 SSObject 支持 [CocoaPods](http://cocoapods.org).  添加下面的配置到 Podfile:
 
 ```ruby
-pod 'NSObject+extend', :git => 'https://github.com/qzs21/SSObject.git'
+pod 'SSObject', '~> 1.0.0'
 ```
 
 
