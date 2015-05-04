@@ -1,3 +1,9 @@
+SSObject
+========================
+[![Pod Version](http://img.shields.io/cocoapods/v/SSObject.svg)](https://cocoadocs.org/docsets/SSObject)
+[![License](https://img.shields.io/cocoapods/l/SSObject.svg)](http://opensource.org/licenses/MIT)
+
+
 ## Quick start
 
 SSObject 支持 [CocoaPods](http://cocoapods.org).  添加下面的配置到 Podfile:
