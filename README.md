@@ -1,7 +1,7 @@
 SSObject
 ========================
-[![Pod Version](http://img.shields.io/cocoapods/v/SSObject.svg)](https://cocoadocs.org/docsets/SSObject)
-[![License](https://img.shields.io/cocoapods/l/SSObject.svg)](http://opensource.org/licenses/MIT)
+[![Pod Version](http://img.shields.io/cocoapods/v/SSObject.svg)](http://cocoadocs.org/docsets/SSObject)
+[![License](http://img.shields.io/cocoapods/l/SSObject.svg)](http://opensource.org/licenses/MIT)
 
 
 ## Quick start
