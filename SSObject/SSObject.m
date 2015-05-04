@@ -219,6 +219,10 @@ bool class_isClass( Class class1, Class class2 ) {
 
 
 + (NSArray *)arrayWithDictionarys:(NSArray *)dictionarys {
+    if ( ![dictionarys isKindOfClass:NSArray.class] )
+    {
+        return nil;
+    }
     NSMutableArray * itmes = [NSMutableArray array];
     for (NSDictionary * dic in dictionarys) {
         id info = [self objectWithDictionary:dic];
