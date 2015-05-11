@@ -6,10 +6,10 @@ SSObject
 
 ## Quick start
 
-SSObject 支持 [CocoaPods](http://cocoapods.org).  添加下面的配置到 Podfile:
+SSObject 支持 [CocoaPods](http://cocoapods.org).  添加下面的配置到`Podfile`:
 
 ```ruby
-pod 'SSObject', '~> 1.0.0'
+pod 'SSObject'
 ```
 
 
