@@ -34,6 +34,9 @@
     NSLog(@"%@", obj);
     NSLog(@"%@", obj.dictionaryFormInfo);
     NSLog(@"%@", objItems);
+    
+    [obj setDictionary:@{@"name": @"213131"}];
+    NSLog(@"%@", obj);
 }
 
 @end

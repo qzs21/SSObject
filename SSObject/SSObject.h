@@ -10,9 +10,21 @@
 
 @interface SSObject : NSObject
 
-/// 使用字典初始化模型对象
+/**
+ *  使用字典初始化模型对象
+ *
+ *  @param dictionary 要初始化的属性
+ *
+ *  @return SSObject
+ */
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 
+/**
+ *  批量设置属性
+ *
+ *  @param dictionary 要设置的属性和值
+ */
+- (void)setDictionary:(NSDictionary *)dictionary;
 
 /**
  *  使用字典创建数据模型
