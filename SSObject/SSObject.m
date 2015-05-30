@@ -182,7 +182,7 @@ bool class_isClass( Class class1, Class class2 ) {
             } else if ([propertyType hasPrefix:@"TI"]) {
                 // unsigned int
                 if ([value isKindOfClass:NSNumber.class] || [value isKindOfClass:NSString.class]) {
-                    [self setValue:@([value unsignedIntValue]) forKey:key];
+                    [self setValue:@([value longLongValue]) forKey:key];
                 }
             } else if ([propertyType hasPrefix:@"Ts"]) {
                 // short
@@ -192,7 +192,7 @@ bool class_isClass( Class class1, Class class2 ) {
             } else if ([propertyType hasPrefix:@"TS"]) {
                 // unsigned short
                 if ([value isKindOfClass:NSNumber.class] || [value isKindOfClass:NSString.class]) {
-                    [self setValue:@([value unsignedShortValue]) forKey:key];
+                    [self setValue:@([value integerValue]) forKey:key];
                 }
             } else if ([propertyType hasPrefix:@"Tq"]) {
                 // long, NSInteger
@@ -202,17 +202,17 @@ bool class_isClass( Class class1, Class class2 ) {
             } else if ([propertyType hasPrefix:@"TQ"]) {
                 // unsigned long, NSUInteger
                 if ([value isKindOfClass:NSNumber.class] || [value isKindOfClass:NSString.class]) {
-                    [self setValue:@([value unsignedLongValue]) forKey:key];
+                    [self setValue:@([value longLongValue]) forKey:key];
                 }
             } else if ([propertyType hasPrefix:@"Tc"]) {
                 // char
                 if ([value isKindOfClass:NSNumber.class] || [value isKindOfClass:NSString.class]) {
-                    [self setValue:@([value charValue]) forKey:key];
+                    [self setValue:@([value intValue]) forKey:key];
                 }
             } else if ([propertyType hasPrefix:@"TC"]) {
                 // unsigned char
                 if ([value isKindOfClass:NSNumber.class] || [value isKindOfClass:NSString.class]) {
-                    [self setValue:@([value unsignedCharValue]) forKey:key];
+                    [self setValue:@([value intValue]) forKey:key];
                 }
             } else if ([propertyType hasPrefix:@"TB"]) {
                 // BOOL
