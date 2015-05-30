@@ -197,17 +197,17 @@ bool class_isClass( Class class1, Class class2 ) {
             } else if ([propertyType hasPrefix:@"Tq"]) {
                 // long, NSInteger
                 if ([value isKindOfClass:NSNumber.class] || [value isKindOfClass:NSString.class]) {
-                    [self setValue:@([value integerValue]) forKey:key];
+                    [self setValue:@([value longValue]) forKey:key];
                 }
             } else if ([propertyType hasPrefix:@"TQ"]) {
                 // unsigned long, NSUInteger
                 if ([value isKindOfClass:NSNumber.class] || [value isKindOfClass:NSString.class]) {
-                    [self setValue:@([value longValue]) forKey:key];
+                    [self setValue:@([value unsignedLongValue]) forKey:key];
                 }
             } else if ([propertyType hasPrefix:@"Tc"]) {
                 // char
                 if ([value isKindOfClass:NSNumber.class] || [value isKindOfClass:NSString.class]) {
-                    [self setValue:@([value intValue]) forKey:key];
+                    [self setValue:@([value charValue]) forKey:key];
                 }
             } else if ([propertyType hasPrefix:@"TC"]) {
                 // unsigned char
