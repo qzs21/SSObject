@@ -267,9 +267,8 @@ bool class_isClass( Class class1, Class class2 ) {
     return [outputFormatter stringFromDate:date];
 }
 
-/// 按照自身属性生成字典，一般用于序列化保存
-- (NSDictionary *)dictionaryFormInfo {
-        
+- (NSDictionary *)dictionaryFormInfoWithNull:(BOOL)withNull
+{
     NSMutableDictionary * dic = [NSMutableDictionary dictionary];
     
     unsigned int outCount = 0;
@@ -278,15 +277,16 @@ bool class_isClass( Class class1, Class class2 ) {
     NSString * key = nil;
     id value = nil;
     
-    for (int i = 0; i < outCount; i++) {
-        
+    for (int i = 0; i < outCount; i++)
+    {
         property = properties[i];
         
         key=[[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
         
         value = [self valueForKey:key];
         
-        if ([value isKindOfClass:NSDate.class]) {
+        if ([value isKindOfClass:NSDate.class])
+        {
             [dic setObject:[self date:value withFormat:[self dateFormatWithPropertyName:key]] forKey:key];
         } else if ([value isKindOfClass:SSObject.class]) {
             [dic setObject:[value dictionaryFormInfo] forKey:key];
@@ -301,12 +301,30 @@ bool class_isClass( Class class1, Class class2 ) {
             }
             [dic setObject:arr forKey:key];
         } else {
-            [dic setObject:value?value:[NSNull null] forKey:key];
+            if (withNull)
+            {
+                [dic setObject:value?value:[NSNull null] forKey:key];
+            }
+            else
+            {
+                if (value != nil && value != [NSNull null])
+                {
+                    [dic setObject:value forKey:key];
+                }
+            }
         }
     }
     free(properties);
     
     return dic;
+}
+/// 按照自身属性生成字典，一般用于序列化保存
+- (NSDictionary *)dictionaryFormInfo {
+    return [self dictionaryFormInfoWithNull:YES];
+}
+- (NSDictionary *)dictionaryFormInfoWithoutNullValue
+{
+    return [self dictionaryFormInfoWithNull:NO];
 }
 
 
