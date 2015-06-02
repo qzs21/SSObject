@@ -351,9 +351,16 @@ bool class_isClass( Class class1, Class class2 ) {
         value1 = [self valueForKey:key];
         value2 = [object valueForKey:key];
         
-        if (value1 != nil && ![value1 isEqual:value2])
+        if (value1 != value2)
         {
-            return NO;
+            if (value1 && ![value1 isEqual:value2])
+            {
+                return NO;
+            }
+            else if (value2 && ![value2 isEqual:value1])
+            {
+                return NO;
+            }
         }
     }
     
