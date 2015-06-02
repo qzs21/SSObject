@@ -37,6 +37,16 @@
     
     [obj setDictionary:@{@"name": @"213131"}];
     NSLog(@"%@", obj);
+    
+    
+    
+    // 对象对比
+    SimpleObject * o1 = [SimpleObject objectWithDictionary:@{@"name": @"steven"}];
+    SimpleObject * o2 = [SimpleObject objectWithDictionary:@{@"name": @"steven"}];
+    SimpleObject * o3 = [SimpleObject objectWithDictionary:@{@"name": @"steven1"}];
+    
+    NSLog(@"%d", [o1 isEqual:o2]);
+    NSLog(@"%d", [o1 isEqual:o3]);
 }
 
 @end

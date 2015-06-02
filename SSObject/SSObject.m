@@ -328,6 +328,39 @@ bool class_isClass( Class class1, Class class2 ) {
 }
 
 
+/// 判断对象属性值是否都相等
+- (BOOL)isEqual:(id)object
+{
+    if (![object isKindOfClass:self.class])
+    {
+        return NO;
+    }
+    
+    unsigned int outCount = 0;
+    objc_property_t * properties = class_copyPropertyList([self class], &outCount);
+    objc_property_t property = NULL;
+    NSString * key = nil;
+    id value1 = nil;
+    id value2 = nil;
+    for (int i = 0; i < outCount; i++)
+    {
+        property = properties[i];
+        
+        key=[[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
+        
+        value1 = [self valueForKey:key];
+        value2 = [object valueForKey:key];
+        
+        if (value1 != nil && ![value1 isEqual:value2])
+        {
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
+
 
 #pragma mark - Debug 输出
 - (NSString *)getDebugString {
