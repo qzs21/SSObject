@@ -7,19 +7,11 @@
 
 #import "SSObject.h"
 #import <objc/runtime.h>
-
-/// class1 是否是 class2或其的子类
-bool class_isClass( Class class1, Class class2 ) {
-    
-    if (class1==NULL || class2==NULL) { return NO; }
-    
-    if (class1 != class2) { return class_isClass( class_getSuperclass(class1), class2 ); }
-    
-    return true;
-}
+#import "SSObjectProperty.h"
 
 @implementation SSObject
 
+#pragma mark - Formats
 - (NSString *)dateFormatWithPropertyName:(NSString *)propertyName {
     return @"yyyy-MM-dd HH:mm:ss";
 }
@@ -30,6 +22,7 @@ bool class_isClass( Class class1, Class class2 ) {
     return NULL;
 }
 
+#pragma mark -
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     
     if (self = [super init]) {
@@ -51,24 +44,15 @@ bool class_isClass( Class class1, Class class2 ) {
         return;
     }
     
-    unsigned int outCount = 0;
-    objc_property_t * properties = class_copyPropertyList([self class], &outCount);
-    NSString * propertyType = nil;
-    objc_property_t property = NULL;
-    NSString * key = nil;
     NSTimeInterval time = 0;
     id value = nil;
-    
-    for (int i = 0; i < outCount; i++)
+    NSString * propertyType;
+    NSString * key;
+    for (SSObjectProperty * property in [self.class propertyItems])
     {
         
-        property = properties[i];
-        
-        propertyType = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
-        //NSLog(@"...... %@", propertyType);
-        
-        key=[[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
-        
+        propertyType = property.propertyType;
+        key = property.propertyName;
         value = [dictionary objectForKey:key];
         
         if ( value==nil || [value isKindOfClass:NSNull.class])
@@ -236,8 +220,6 @@ bool class_isClass( Class class1, Class class2 ) {
             
         }
     }
-    
-    free(properties);
 }
 
 
@@ -271,18 +253,11 @@ bool class_isClass( Class class1, Class class2 ) {
 {
     NSMutableDictionary * dic = [NSMutableDictionary dictionary];
     
-    unsigned int outCount = 0;
-    objc_property_t * properties = class_copyPropertyList([self class], &outCount);
-    objc_property_t property = NULL;
-    NSString * key = nil;
     id value = nil;
-    
-    for (int i = 0; i < outCount; i++)
+    NSString * key = nil;
+    for (SSObjectProperty * property in [self.class propertyItems])
     {
-        property = properties[i];
-        
-        key=[[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
-        
+        key = property.propertyName;
         value = [self valueForKey:key];
         
         if ([value isKindOfClass:NSDate.class])
@@ -314,8 +289,6 @@ bool class_isClass( Class class1, Class class2 ) {
             }
         }
     }
-    free(properties);
-    
     return dic;
 }
 /// 按照自身属性生成字典，一般用于序列化保存
@@ -336,17 +309,12 @@ bool class_isClass( Class class1, Class class2 ) {
         return NO;
     }
     
-    unsigned int outCount = 0;
-    objc_property_t * properties = class_copyPropertyList([self class], &outCount);
-    objc_property_t property = NULL;
     NSString * key = nil;
     id value1 = nil;
     id value2 = nil;
-    for (int i = 0; i < outCount; i++)
+    for (SSObjectProperty * property in [self.class propertyItems])
     {
-        property = properties[i];
-        
-        key=[[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
+        key = property.propertyName;
         
         value1 = [self valueForKey:key];
         value2 = [object valueForKey:key];
