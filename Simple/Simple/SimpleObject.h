@@ -13,6 +13,7 @@
 @property (nonatomic, strong) SimpleObject * testObj;
 @property (nonatomic, strong) NSString * name;
 @property (nonatomic, assign) int intValue;
+@property (nonatomic, assign) NSDate * dateValue;
 @property (nonatomic, strong) NSArray * testItems;
 @property (nonatomic, strong) id value;
 

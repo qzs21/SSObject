@@ -56,7 +56,7 @@
 - (NSString *)dateFormatWithPropertyName:(NSString *)propertyName;
 
 /// 对于数字时间，默认使用毫秒做单位，如果不是毫秒，重载返回单位对于毫秒的倍数
-- (float)dateMillisecondMultipleWithPropertyName:(NSString *)propertyName;
+- (double)dateMillisecondMultipleWithPropertyName:(NSString *)propertyName;
 
 /// 解析数组时，需要子类重载，根据属性名，返回数组中对象的类名
 - (Class)arrayClassWithPropertyName:(NSString *)propertyName;

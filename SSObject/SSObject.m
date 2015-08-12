@@ -15,7 +15,7 @@
 - (NSString *)dateFormatWithPropertyName:(NSString *)propertyName {
     return @"yyyy-MM-dd HH:mm:ss";
 }
-- (float)dateMillisecondMultipleWithPropertyName:(NSString *)propertyName {
+- (double)dateMillisecondMultipleWithPropertyName:(NSString *)propertyName {
     return 0.001;
 }
 - (Class)arrayClassWithPropertyName:(NSString *)propertyName {

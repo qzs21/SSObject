@@ -19,7 +19,8 @@
     [super viewDidLoad];
     
     NSDictionary * dic = @{ @"testObj": @{  @"name": @"test2",
-                                            @"intValue": @(80) },
+                                            @"intValue": @(80),
+                                            @"dateValue": @(1435030889000)},
                             @"name":        @"test1",
                             @"intValue":    @"10",
                             @"value":       @{  @"key1": @"value1" },
@@ -37,7 +38,6 @@
     
     [obj setDictionary:@{@"name": @"213131"}];
     NSLog(@"%@", obj);
-    
     
     
     // 对象对比
