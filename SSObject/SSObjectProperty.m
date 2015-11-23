@@ -20,6 +20,9 @@ bool class_isClass( Class class1, Class class2 )
     return true;
 }
 
+@interface SSObjectProperty()
+@property (nonatomic, copy) NSString * infoString; ///< 属性的原始信息
+@end
 
 @implementation SSObjectProperty
 
@@ -28,15 +31,37 @@ bool class_isClass( Class class1, Class class2 )
 
 @implementation NSObject (NSObject_propertyItems)
 
-static const char* NSObject_propertyItems = "NSObject_propertyItems";
++ (NSDictionary *)_allPropertyType {
+    NSDictionary * allPropertyType = nil;
+    if (allPropertyType == nil)
+    {
+        allPropertyType = @{
+                            
+                            @"T@":      @(SSObjectPropertyTypeObject),
+                            @"Ti":      @(SSObjectPropertyTypeInt),
+                            @"TI":      @(SSObjectPropertyTypeUnsignedInt),
+                            @"Ts":      @(SSObjectPropertyTypeShort),
+                            @"TS":      @(SSObjectPropertyTypeUnsignedShort),
+                            @"Tq":      @(SSObjectPropertyTypeLong),
+                            @"TQ":      @(SSObjectPropertyTypeUnsignedLong),
+                            @"Tc":      @(SSObjectPropertyTypeChar),
+                            @"TC":      @(SSObjectPropertyTypeUnsignedChar),
+                            @"TB":      @(SSObjectPropertyTypeBOOL),
+                            @"Td":      @(SSObjectPropertyTypeDouble),
+                            @"Tf":      @(SSObjectPropertyTypeFloat),
+                            
+                            };
+    }
+    return allPropertyType;
+}
+
 + (NSArray *)propertyItems;
 {
     // 缓存
-    NSMutableDictionary * cacheItems = (id)objc_getAssociatedObject(self, NSObject_propertyItems);
+    static NSMutableDictionary * cacheItems = nil;
     if (cacheItems == nil)
     {
         cacheItems = [NSMutableDictionary dictionary];
-        objc_setAssociatedObject(self, NSObject_propertyItems, cacheItems, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
     NSArray * callBackData = [cacheItems objectForKey:NSStringFromClass(self)];
@@ -52,8 +77,32 @@ static const char* NSObject_propertyItems = "NSObject_propertyItems";
         {
             property = properties[i];
             item = [[SSObjectProperty alloc] init];
-            item.propertyName = [[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
-            item.propertyType = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
+            item.name = [[NSString alloc] initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
+            item.infoString = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
+            item.type = SSObjectPropertyTypeUnknown;
+            
+            // 确定属性类型
+            NSDictionary * allTypes = self._allPropertyType;
+            for (NSString * key in allTypes.allKeys) {
+                if ([item.infoString hasPrefix:key]) {
+                    item.type = (SSObjectPropertyType)[allTypes[key] integerValue];
+                    break;
+                }
+            }
+            // 如果是对象，并且类型不是 id ，就确定对象的类
+            if ( (item.type == SSObjectPropertyTypeObject) && ([item.infoString hasPrefix:@"T@\""]) )
+            {
+                // 获取类名
+                NSRange start = [item.infoString rangeOfString:@"T@\""];
+                NSRange end = [item.infoString rangeOfString:@"\","];
+                NSString * className = nil;
+                if (start.length && end.length)
+                {
+                    className = [item.infoString substringWithRange:NSMakeRange(start.location+start.length, end.location - start.length)];
+                }
+                item.class = NSClassFromString(className);
+            }
+            
             [items addObject:item];
         }
         free(properties);

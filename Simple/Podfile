@@ -1,3 +1,7 @@
 platform :ios, "6.0"
 
 pod "SSObject", path: '../'
+
+target :SimpleTests, :exclusive => true do
+    pod "SSObject", path: '../'
+end

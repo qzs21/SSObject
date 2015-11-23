@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'SSObject'
-  s.version  = '1.4.4'
+  s.version  = '1.4.5'
   s.license  = { :type => 'MIT' }
   s.summary  = '对象序列化反序列化 framework.'
   s.homepage = 'http://blog.isteven.cn'
