@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface SSObject : NSObject
 
 /**
@@ -46,12 +45,6 @@
 + (NSArray *)arrayWithDictionarys:(NSArray *)dictionarys;
 
 
-
-/// 按照自身属性生成字典，一般用于序列化保存
-@property (nonatomic, readonly) NSDictionary * dictionaryFormInfo;
-@property (nonatomic, readonly) NSDictionary * dictionaryFormInfoWithoutNullValue; // 同上，忽略空值
-
-
 /// 时间格式，默认 @"yyyy-MM-dd HH:mm:ss" ， 如需要修改，子类重载
 - (NSString *)dateFormatWithPropertyName:(NSString *)propertyName;
 
@@ -62,3 +55,7 @@
 - (Class)arrayClassWithPropertyName:(NSString *)propertyName;
 
 @end
+
+
+//#import "SSObjectEqual.h"
+//#import "SSObjectOutput.h"
