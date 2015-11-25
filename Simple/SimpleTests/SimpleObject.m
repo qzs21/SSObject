@@ -14,4 +14,9 @@
     return SimpleObject.class;
 }
 
+// 实现一个只读属性，确保设置时不引起崩溃
+- (NSNumber *)readonly {
+    return nil;
+}
+
 @end

@@ -40,6 +40,7 @@
         @"stringValue": @"StringDone",
         @"numberValue": @(1),
         @"dateValue": @(1435030889000),
+        @"readonly": @(1),
     };
 }
 
@@ -71,7 +72,7 @@
     SimpleObject * obj1 = [SimpleObject objectWithDictionary:dic]; // 需要测试的对象
     SimpleObject * obj2 = [SimpleObject objectWithDictionary:self.testDicationry]; // 用于比较的样板
     
-    XCTAssert([obj1.objectValue isEqual:obj2], @"object value error");
+    XCTAssert([obj1.objectValue isEqual:obj2], @"set object value error");
 }
 
 - (void)testSetArrayProperty {
@@ -106,7 +107,7 @@
     // This is an example of a performance test case.
     [self measureBlock:^{
         // Put the code you want to measure the time of here.
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 10; i++) {
             [SimpleObject objectWithDictionary:self.testDicationry];
         }
     }];

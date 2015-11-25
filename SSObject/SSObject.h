@@ -55,7 +55,3 @@
 - (Class)arrayClassWithPropertyName:(NSString *)propertyName;
 
 @end
-
-
-//#import "SSObjectEqual.h"
-//#import "SSObjectOutput.h"

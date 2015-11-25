@@ -22,6 +22,8 @@
 @property (nonatomic, assign) double doubleValue;
 @property (nonatomic, assign) float floatValue;
 
+// 实现一个只读属性，确保设置时不引起崩溃
+@property (nonatomic, readonly) NSNumber * readonly;
 
 @property (nonatomic, strong) SimpleObject * objectValue;
 

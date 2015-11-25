@@ -71,21 +71,22 @@
 // 给对象设置值
 - (void)_setPropertyItem:(SSObjectProperty *)p objectValue:(id)value
 {
+    id finalValue = value;
     if (class_isClass(p.class, NSString.class))
     {
         // NSSting
-        [self setValue:[NSString stringWithFormat:@"%@", value] forKey:p.name];
+        finalValue = [NSString stringWithFormat:@"%@", value];
     }
     else if (class_isClass(p.class, NSNumber.class))
     {
         // NSNumber
         if ([value isKindOfClass:NSNumber.class])
         {
-            [self setValue:value forKey:p.name];
+            // 正好是NSNumber什么都不做
         }
         else if ([value isKindOfClass:NSString.class])
         {
-            [self setValue:@([value doubleValue]) forKey:p.name];
+            finalValue = @([value doubleValue]);
         }
     }
     else if (class_isClass(p.class, NSDate.class))
@@ -99,16 +100,16 @@
         
         if (isNumber)
         {
+            // 数字时间
             NSTimeInterval time = [value doubleValue] * [self dateMillisecondMultipleWithPropertyName:p.name];
-            NSDate * date = [NSDate dateWithTimeIntervalSince1970:time];
-            [self setValue:date forKey:p.name];
+            finalValue = [NSDate dateWithTimeIntervalSince1970:time];
         }
         else
         {
+            // 字符串时间
             NSDateFormatter *dateformatter=[[NSDateFormatter alloc] init];
             dateformatter.dateFormat = [self dateFormatWithPropertyName:p.name];
-            NSDate * date = [dateformatter dateFromString:value];
-            [self setValue:date forKey:p.name];
+            finalValue = [dateformatter dateFromString:value];
         }
     }
     else if (class_isClass(p.class, NSArray.class))
@@ -132,60 +133,59 @@
             [items addObject:obj];
         }
         
-        [self setValue:[NSArray arrayWithArray:items] forKey:p.name];
+        finalValue = [NSArray arrayWithArray:items];
         
     } else if (class_isClass(p.class, SSObject.class)) {
         // 数据模型对象是属性，自动生成对象
-        id autoCreateObj = [p.class objectWithDictionary:value];
-        if (autoCreateObj) {
-            [self setValue:autoCreateObj forKey:p.name];
-        }
-    } else {
-        // 其他类型对象 (id，和其他类)
-        [self setValue:value forKey:p.name];
+        finalValue = [p.class objectWithDictionary:value];
     }
+    [self setValue:finalValue forKey:p.name];
 }
 
 // 设置基础类型的属性的值
 - (void)_setPropertyItem:(SSObjectProperty *)p value:(id)value
 {
     if ([value isKindOfClass:NSNumber.class] || [value isKindOfClass:NSString.class]) {
+        id finalValue = nil;
         switch (p.type) {
             case SSObjectPropertyTypeInt:
-                [self setValue:@([value intValue]) forKey:p.name];
+                finalValue = @([value intValue]);
                 break;
             case SSObjectPropertyTypeUnsignedInt:
                 // NSNumber 没有 unsignedIntegerValue 方法，避免崩溃，使用 longLongValue
-                [self setValue:@([value longLongValue]) forKey:p.name];
+                finalValue = @([value longLongValue]);
                 break;
             case SSObjectPropertyTypeShort:
-                [self setValue:@([value shortValue]) forKey:p.name];
+                finalValue = @([value shortValue]);
                 break;
             case SSObjectPropertyTypeUnsignedShort:
-                [self setValue:@([value integerValue]) forKey:p.name];
+                finalValue = @([value integerValue]);
                 break;
             case SSObjectPropertyTypeLong:
-                [self setValue:@([value longValue]) forKey:p.name];
+                finalValue = @([value longValue]);
                 break;
             case SSObjectPropertyTypeUnsignedLong:
-                [self setValue:@([value longLongValue]) forKey:p.name];
+                finalValue = @([value longLongValue]);
                 break;
             case SSObjectPropertyTypeChar:
-                [self setValue:@([value intValue]) forKey:p.name];
+                finalValue = @([value intValue]);
                 break;
             case SSObjectPropertyTypeUnsignedChar:
-                [self setValue:@([value intValue]) forKey:p.name];
+                finalValue = @([value intValue]);
                 break;
             case SSObjectPropertyTypeBOOL:
-                [self setValue:@([value boolValue]) forKey:p.name];
+                finalValue = @([value boolValue]);
                 break;
             case SSObjectPropertyTypeDouble:
-                [self setValue:@([value doubleValue]) forKey:p.name];
+                finalValue = @([value doubleValue]);
                 break;
             case SSObjectPropertyTypeFloat:
-                [self setValue:@([value floatValue]) forKey:p.name];
+                finalValue = @([value floatValue]);
                 break;
             default: break;
+        }
+        if (finalValue) {
+            [self setValue:finalValue forKey:p.name];
         }
     }
 }

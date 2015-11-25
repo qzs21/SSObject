@@ -55,6 +55,17 @@ bool class_isClass( Class class1, Class class2 )
     return allPropertyType;
 }
 
+// 获取setter方法名
++ (NSString *)setterStringWithName:(NSString *)name
+{
+    if (name.length == 0) {
+        return nil;
+    }
+    NSString * first = [name substringToIndex:1];
+    NSString * secon = [name substringFromIndex:1];
+    return [NSString stringWithFormat:@"set%@%@:", first.uppercaseString, secon];
+}
+
 + (NSArray *)propertyItems;
 {
     // 缓存
@@ -72,7 +83,7 @@ bool class_isClass( Class class1, Class class2 )
         objc_property_t property = NULL;
         
         NSMutableArray * items = [NSMutableArray array];
-        SSObjectProperty * item = nil;
+        SSObjectProperty * item = nil; // 保存属性对象
         for (int i = 0; i < outCount; i++)
         {
             property = properties[i];
@@ -81,6 +92,11 @@ bool class_isClass( Class class1, Class class2 )
             item.infoString = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
             item.type = SSObjectPropertyTypeUnknown;
             
+            if (![self instancesRespondToSelector:NSSelectorFromString([self setterStringWithName:item.name])]) {
+                // 不支持setter，不登记属性
+                continue;
+            }
+
             // 确定属性类型
             NSDictionary * allTypes = self._allPropertyType;
             for (NSString * key in allTypes.allKeys) {
