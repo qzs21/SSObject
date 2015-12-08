@@ -13,7 +13,7 @@
  *      1.输出字典用于序列化
  *      2.输出debug信息
  */
-@interface SSObjectOutput : SSObject
+@interface SSObject (SSObjectOutput)
 
 /// 按照自身属性生成字典，一般用于序列化保存
 @property (nonatomic, readonly) NSDictionary * dictionaryFormInfo;

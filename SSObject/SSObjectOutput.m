@@ -9,7 +9,7 @@
 #import "SSObjectOutput.h"
 #import "SSObjectProperty.h"
 
-@implementation SSObjectOutput
+@implementation SSObject (SSObjectOutput)
 
 - (NSString *)date:(NSDate *)date withFormat:(NSString *)format {
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
